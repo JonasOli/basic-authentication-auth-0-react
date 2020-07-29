@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Auth0Provider } from "@auth0/auth0-react";
+import React from "react";
+import { BrowserRouter, Route } from "react-router-dom";
+import envVariables from "./Configs/envVariables";
+import GlobalStyle from "./GlobalStyle";
+import Routes from "./Routes";
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      <GlobalStyle />
+      <BrowserRouter>
+        <Auth0Provider
+          domain={envVariables.auth0Domain || ""}
+          clientId={envVariables.auth0ClientId || ""}
+          redirectUri={window.location.origin}
+          audience={envVariables.auth0Audience}
+          scope="read:current_user update:current_user_metadata"
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Route path="*" component={Routes} />
+        </Auth0Provider>
+      </BrowserRouter>
+    </>
   );
-}
+};
 
 export default App;
